@@ -25,10 +25,19 @@ def verifyFile(path):
 def countSeq(lines):
     numSeq = len(lines)/4
     print("number of Sequences: ", numSeq)
-    return
+
 
 # counts the number of nucleotides in a file
-def countNuc():
+def countNuc(lines):
+    count = 0#
+    lineNum = 1
+    for line in lines:
+        if lineNum %2 == 0 and lineNum%4 !=0:
+            count += len(line.rstrip())
+        lineNum += 1
+    print("number of nucleotides: ", count)
+
+
     #TODO count number of nucleotides
     return
 
@@ -49,6 +58,7 @@ if __name__ == '__main__':
         countSeq(lines)
     elif request == 'n' or request == 'N':
         print("Counting the number of nucleotides ... \n")
+        countNuc(lines)
 
 
 
