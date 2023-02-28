@@ -1,13 +1,15 @@
 import os
+import gzip
 
 #Reads the FASTQ file
 def readFile(path):
     verifyFile(path)
     lines = []
+    open_file = gzip.open if isGzip(path) else open # selects opener based on file type
     filename = os.path.basename(path)
-    with open(filename) as fh:
+    with open_file(filename) as f:
         while True:
-            line = fh.readline()# read base sequence
+            line = f.readline()# read base sequence
             if len(line) == 0:
                 break
             lines.append(line)
@@ -17,8 +19,9 @@ def readFile(path):
 def verifyFile(path):
     if not os.path.exists(path):
         raise FileNotFoundError
-    root, ext = os.path.splitext(path)
-    if not(ext == '.fastq' or ext == '.fq'):
+    if isGzip(path):
+        path = path[:-3]
+    if not(path.endswith('.fastq') or path.endswith('.fq')):
         print("Not correct file type")
 
 # Counts the number of sequences in a file
@@ -36,14 +39,13 @@ def countNuc(lines):
             count += len(line.rstrip())
         lineNum += 1
     print("number of nucleotides: ", count)
-
-
-    #TODO count number of nucleotides
     return
 
-def gzip():
-    #TODO add gzip compatability
-    return
+def isGzip(path):
+    if path.endswith('.gz'):
+        return True
+    else:
+        return False
 
 
 if __name__ == '__main__':
